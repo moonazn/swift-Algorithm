@@ -1,33 +1,21 @@
 import Foundation
 
 func solution(_ answers:[Int]) -> [Int] {
-    let man1 = [1, 2, 3, 4, 5]
-    let man2 = [2, 1, 2, 3, 2, 4, 2, 5]
-    let man3 = [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
-    var count = [0, 0, 0]
-    var count1 = 0
-    var count2 = 0
-    var count3 = 0
-    var result : [Int] = []
+    let patterns = [
+        [1, 2, 3, 4, 5],
+        [2, 1, 2, 3, 2, 4, 2, 5],
+        [3, 3, 1, 1, 2, 2, 4, 4, 5 ,5]
+    ]
     
-    for i in 0..<answers.count {
-        if man1[i%5] == answers[i] {
-            count[0] += 1
-        }
-        if man2[i%8] == answers[i] {
-            count[1] += 1
-        }
-        if man3[i%10] == answers[i] {
-            count[2] += 1
-        }
-    }
-    let maxValue = count.max()!
+    let scores = patterns.map { pattern in
+               answers.enumerated().filter { (index, answer) in
+                          answer == pattern[index % pattern.count]
+                                           }.count
+                              }
     
-    for (index, value) in count.enumerated() {
-        if value == maxValue {
-            result.append(index + 1)
-        }
-    }
+    let maxScore = scores.max()!
     
-    return result
+    return scores.enumerated().compactMap { (index, score) in
+                                          score == maxScore ? index + 1 : nil }
+    
 }
